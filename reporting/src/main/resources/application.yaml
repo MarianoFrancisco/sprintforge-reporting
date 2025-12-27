@@ -36,13 +36,13 @@ spring:
     bootstrap-servers: ${KAFKA_HOST:localhost}:9092
 
     consumer:
-      group-id: ${KAFKA_GROUP:employee}
+      group-id: ${KAFKA_GROUP:reporting}
       auto-offset-reset: latest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
-        spring.json.trusted.packages: "com.sprintforge.employee.*"
+        spring.json.trusted.packages: "com.sprintforge.reporting.*"
         spring.json.use.type.headers: false
 
     producer:
