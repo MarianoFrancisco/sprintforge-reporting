@@ -1,4 +1,4 @@
-package com.sprintforge.reporting.reporting.application.port.result;
+package com.sprintforge.reporting.reporting.application.service.internal;
 
 public enum IncomeSubtotal {
     CLIENT,
