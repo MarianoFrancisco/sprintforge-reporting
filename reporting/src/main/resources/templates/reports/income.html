@@ -198,7 +198,7 @@
         <tr>
             <td class="label">Subtotal por</td>
             <td class="value"
-                th:text="${result.subtotalType == T(com.sprintforge.reporting.reporting.application.port.result.IncomeSubtotal).CLIENT ? 'Cliente' : 'Área'}">
+                th:text="${result.subtotalType == T(com.sprintforge.reporting.reporting.application.service.internal.IncomeSubtotal).CLIENT ? 'Cliente' : 'Área'}">
                 Cliente
             </td>
             <td class="label">Sistema</td>
@@ -228,7 +228,7 @@
     </table>
 
     <div class="section-label">
-        <span th:text="${result.subtotalType == T(com.sprintforge.reporting.reporting.application.port.result.IncomeSubtotal).CLIENT ? 'Subtotal por cliente: ' : 'Subtotal por área: '}">
+        <span th:text="${result.subtotalType == T(com.sprintforge.reporting.reporting.application.service.internal.IncomeSubtotal).CLIENT ? 'Subtotal por cliente: ' : 'Subtotal por área: '}">
             Subtotal:
         </span>
         <span th:text="${block.subtotalLabel}">Etiqueta</span>

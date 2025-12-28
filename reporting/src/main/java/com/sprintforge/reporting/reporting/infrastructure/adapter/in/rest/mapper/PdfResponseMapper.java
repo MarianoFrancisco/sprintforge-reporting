@@ -45,7 +45,8 @@ public final class PdfResponseMapper {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
 
-        String filename = prefix + "_" + from + "_" + to + ".pdf";
+        String range = buildRangeLabel(from, to);
+        String filename = prefix + "_" + range + ".pdf";
 
         ContentDisposition disposition = ContentDisposition
                 .attachment()
@@ -58,5 +59,21 @@ public final class PdfResponseMapper {
                 .ok()
                 .headers(headers)
                 .body(pdf);
+    }
+
+    private static String buildRangeLabel(LocalDate from, LocalDate to) {
+        if (from == null && to == null) {
+            return "all";
+        }
+
+        if (from != null && to != null) {
+            return from + "_" + to;
+        }
+
+        if (from != null) {
+            return from + "_to-all";
+        }
+
+        return "all_to-" + to;
     }
 }
