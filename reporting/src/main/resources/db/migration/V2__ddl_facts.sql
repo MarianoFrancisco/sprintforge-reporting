@@ -2,8 +2,7 @@ CREATE TABLE fact_project_payment
 (
     payment_id UUID PRIMARY KEY,
     project_id UUID           NOT NULL
-        REFERENCES dim_project (project_id)
-            ON DELETE CASCADE,
+        REFERENCES dim_project (project_id),
     date       DATE           NOT NULL,
     amount     NUMERIC(12, 2) NOT NULL,
     method     VARCHAR(20)    NOT NULL
@@ -19,8 +18,7 @@ CREATE TABLE fact_employee_payment
 (
     payment_id  UUID PRIMARY KEY,
     employee_id UUID           NOT NULL
-        REFERENCES dim_employee (employee_id)
-            ON DELETE CASCADE,
+        REFERENCES dim_employee (employee_id),
     date        DATE           NOT NULL,
     base_salary NUMERIC(10, 2) NOT NULL,
     bonus       NUMERIC(10, 2) NOT NULL DEFAULT 0.00,

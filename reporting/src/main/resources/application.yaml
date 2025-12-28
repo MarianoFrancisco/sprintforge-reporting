@@ -58,6 +58,10 @@ spring:
       ack-mode: record
 
     topics:
+      employee-created: ${KAFKA_TOPIC_EMPLOYEE_CREATED:employee.created}
+      project-created: ${KAFKA_TOPIC_PROJECT_CREATED:project.created}
+      payment-made: ${KAFKA_TOPIC_PAYMENT_MADE:payment.made}
+      paid-employee: ${KAFKA_TOPIC_PAID_EMPLOYEE:paid.employee}
 
     groups:
       default-group: ${spring.kafka.consumer.group-id}
