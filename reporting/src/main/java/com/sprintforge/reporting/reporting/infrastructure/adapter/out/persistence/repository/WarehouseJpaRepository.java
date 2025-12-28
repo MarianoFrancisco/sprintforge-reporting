@@ -24,7 +24,8 @@ public interface WarehouseJpaRepository extends JpaRepository<DimProjectEntity, 
                     COALESCE(SUM(f.amount), 0) AS total
                 FROM fact_project_payment f
                 JOIN dim_project p ON p.project_id = f.project_id
-                WHERE f.date BETWEEN ?1 AND ?2
+                WHERE (?1 IS NULL OR f.date >= ?1)
+                  AND (?2 IS NULL OR f.date <= ?2)
                   AND p.is_deleted = false
                   AND (?3 IS NULL OR p.project_id = ?3)
                 GROUP BY p.project_id, p.project_key, p.name, p.client, p.area
@@ -44,7 +45,8 @@ public interface WarehouseJpaRepository extends JpaRepository<DimProjectEntity, 
                     f.amount     AS amount
                 FROM fact_project_payment f
                 JOIN dim_project p ON p.project_id = f.project_id
-                WHERE f.date BETWEEN ?1 AND ?2
+                WHERE (?1 IS NULL OR f.date >= ?1)
+                  AND (?2 IS NULL OR f.date <= ?2)
                   AND p.is_deleted = false
                   AND (?3 IS NULL OR p.project_id = ?3)
                 ORDER BY f.project_id, f.date
@@ -59,10 +61,14 @@ public interface WarehouseJpaRepository extends JpaRepository<DimProjectEntity, 
             SELECT COALESCE(SUM(f.amount), 0)
             FROM fact_project_payment f
             JOIN dim_project p ON p.project_id = f.project_id
-            WHERE f.date BETWEEN ?1 AND ?2
+            WHERE (?1 IS NULL OR f.date >= ?1)
+              AND (?2 IS NULL OR f.date <= ?2)
               AND p.is_deleted = false
             """, nativeQuery = true)
-    BigDecimal totalIncome(LocalDate from, LocalDate to);
+    BigDecimal totalIncome(
+            LocalDate from,
+            LocalDate to
+    );
 
     @Query(value = """
             SELECT
@@ -75,10 +81,14 @@ public interface WarehouseJpaRepository extends JpaRepository<DimProjectEntity, 
                 f.total       AS total
             FROM fact_employee_payment f
             JOIN dim_employee e ON e.employee_id = f.employee_id
-            WHERE f.date BETWEEN ?1 AND ?2
+            WHERE (?1 IS NULL OR f.date >= ?1)
+              AND (?2 IS NULL OR f.date <= ?2)
             ORDER BY e.full_name, f.date
             """, nativeQuery = true)
-    List<EmployeePaymentDetailView> employeePaymentDetails(LocalDate from, LocalDate to);
+    List<EmployeePaymentDetailView> employeePaymentDetails(
+            LocalDate from,
+            LocalDate to
+    );
 
     @Query(value = """
             SELECT
@@ -87,16 +97,24 @@ public interface WarehouseJpaRepository extends JpaRepository<DimProjectEntity, 
                 COALESCE(SUM(f.deduction), 0)   AS deduction,
                 COALESCE(SUM(f.total), 0)       AS total
             FROM fact_employee_payment f
-            WHERE f.date BETWEEN ?1 AND ?2
+            WHERE (?1 IS NULL OR f.date >= ?1)
+              AND (?2 IS NULL OR f.date <= ?2)
             """, nativeQuery = true)
-    PayrollExpenseSummaryView payrollExpenseSummary(LocalDate from, LocalDate to);
+    PayrollExpenseSummaryView payrollExpenseSummary(
+            LocalDate from,
+            LocalDate to
+    );
 
     @Query(value = """
             SELECT COALESCE(SUM(f.total), 0)
             FROM fact_employee_payment f
-            WHERE f.date BETWEEN ?1 AND ?2
+            WHERE (?1 IS NULL OR f.date >= ?1)
+              AND (?2 IS NULL OR f.date <= ?2)
             """, nativeQuery = true)
-    BigDecimal totalPayrollExpense(LocalDate from, LocalDate to);
+    BigDecimal totalPayrollExpense(
+            LocalDate from,
+            LocalDate to
+    );
 
     @Query(value = """
             SELECT
@@ -106,14 +124,18 @@ public interface WarehouseJpaRepository extends JpaRepository<DimProjectEntity, 
                 p.client      AS client,
                 p.area        AS area,
                 f.method      AS method,
-                f.amount      AS amount
+                f.amount     AS amount
             FROM fact_project_payment f
             JOIN dim_project p ON p.project_id = f.project_id
-            WHERE f.date BETWEEN ?1 AND ?2
+            WHERE (?1 IS NULL OR f.date >= ?1)
+              AND (?2 IS NULL OR f.date <= ?2)
               AND p.is_deleted = false
             ORDER BY f.date, p.project_key
             """, nativeQuery = true)
-    List<ProfitIncomeView> profitIncomeRows(LocalDate from, LocalDate to);
+    List<ProfitIncomeView> profitIncomeRows(
+            LocalDate from,
+            LocalDate to
+    );
 
     @Query(value = """
             SELECT
@@ -126,8 +148,12 @@ public interface WarehouseJpaRepository extends JpaRepository<DimProjectEntity, 
                 f.total       AS total
             FROM fact_employee_payment f
             JOIN dim_employee e ON e.employee_id = f.employee_id
-            WHERE f.date BETWEEN ?1 AND ?2
+            WHERE (?1 IS NULL OR f.date >= ?1)
+              AND (?2 IS NULL OR f.date <= ?2)
             ORDER BY f.date, e.full_name
             """, nativeQuery = true)
-    List<ProfitExpenseView> profitExpenseRows(LocalDate from, LocalDate to);
+    List<ProfitExpenseView> profitExpenseRows(
+            LocalDate from,
+            LocalDate to
+    );
 }

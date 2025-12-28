@@ -14,10 +14,8 @@ import java.util.UUID;
         message = "La fecha de fin no puede ser anterior a la fecha de inicio"
 )
 public record IncomePdfRequestDTO(
-        @NotNull(message = "La fecha de inicio es obligatoria")
         LocalDate from,
 
-        @NotNull(message = "La fecha de fin es obligatoria")
         LocalDate to,
 
         @NotNull(message = "El tipo de subtotal es obligatorio")
