@@ -1,9 +1,9 @@
 package com.sprintforge.reporting.reporting.application.port.out.persistence;
 
-import com.sprintforge.reporting.reporting.application.port.result.ExpenseResult;
+import com.sprintforge.reporting.reporting.application.service.internal.Expense;
 
 import java.time.LocalDate;
 
 public interface LoadExpense {
-    ExpenseResult loadExpense(LocalDate from, LocalDate to);
+    Expense loadExpense(LocalDate from, LocalDate to);
 }

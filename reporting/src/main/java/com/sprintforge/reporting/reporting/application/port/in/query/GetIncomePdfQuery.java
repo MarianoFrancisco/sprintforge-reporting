@@ -1,6 +1,6 @@
 package com.sprintforge.reporting.reporting.application.port.in.query;
 
-import com.sprintforge.reporting.reporting.application.port.result.IncomeSubtotal;
+import com.sprintforge.reporting.reporting.application.service.internal.IncomeSubtotal;
 
 import java.time.LocalDate;
 import java.util.UUID;
