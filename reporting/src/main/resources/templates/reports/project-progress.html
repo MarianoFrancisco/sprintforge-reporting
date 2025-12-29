@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Reporte de avance por proyecto</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 24mm 16mm 18mm 16mm;
+            @top-center {
+                content: element(pageHeader);
+            }
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 9px;
+            }
+        }
+
+        body {
+            font-family: sans-serif;
+            font-size: 10.5px;
+            color: #111;
+        }
+
+        .page-header {
+            position: running(pageHeader);
+            border-bottom: 1px solid #333;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header-left {
+            width: 30%;
+            vertical-align: middle;
+        }
+
+        .header-center {
+            width: 40%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .header-right {
+            width: 30%;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        .logo {
+            height: 42px;
+        }
+
+        .report-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .report-subtitle {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .summary-box {
+            border: 1px solid #444;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .summary-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .block {
+            border: 1px solid #444;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .block-title {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        table.report {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+
+        table.report th, table.report td {
+            border: 1px solid #444;
+            padding: 5px;
+        }
+
+        table.report th {
+            font-weight: bold;
+            background: #f3f3f3;
+        }
+
+        .num {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .empty {
+            font-style: italic;
+            color: #444;
+        }
+
+        .pill {
+            display: inline-block;
+            border: 1px solid #444;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 9.5px;
+        }
+
+        .avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+            vertical-align: middle;
+        }
+
+        .member-name {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <table class="header-table">
+        <tr>
+            <td class="header-left">
+                <img class="logo" src="https://d25pia0bxxb59z.cloudfront.net/logo.png" alt="Logo"/>
+            </td>
+            <td class="header-center">
+                <div class="report-title">Reporte de avance por proyecto</div>
+                <div class="report-subtitle">Historias, sprints actuales y miembros</div>
+            </td>
+            <td class="header-right">
+                <div class="report-subtitle">
+                    Generado:
+                    <span th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">2025-01-01</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="summary-box">
+    <div class="summary-title">Resumen global</div>
+    <table class="report">
+        <thead>
+        <tr>
+            <th>Total proyectos</th>
+            <th>Total sprints</th>
+            <th>Sprints creados</th>
+            <th>Sprints iniciados</th>
+            <th>Sprints completados</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="center" th:text="${result.totalProjects}">0</td>
+            <td class="center" th:text="${result.totalSprints}">0</td>
+            <td class="center" th:text="${result.createdSprints}">0</td>
+            <td class="center" th:text="${result.startedSprints}">0</td>
+            <td class="center" th:text="${result.completedSprints}">0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${#lists.isEmpty(result.projects)}" class="empty" style="margin-top: 10px;">
+    No hay proyectos para mostrar.
+</div>
+
+<div th:each="p : ${result.projects}" class="block">
+    <div class="block-title">
+        <span th:text="${p.projectKey}">PRJ</span> - <span th:text="${p.projectName}">Proyecto</span>
+        <span style="float:right;">
+      Progreso:
+      <span class="pill"
+            th:text="|${#numbers.formatDecimal(p.progressPercentage, 1, 2)}%|">0.00%</span>
+    </span>
+    </div>
+
+    <div class="section-title">Historias</div>
+    <table class="report">
+        <thead>
+        <tr>
+            <th class="num">Backlog</th>
+            <th class="num">Pendientes</th>
+            <th class="num">En progreso</th>
+            <th class="num">Completadas</th>
+            <th class="num">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="num" th:text="${p.backlogCount}">0</td>
+            <td class="num" th:text="${p.pendingCount}">0</td>
+            <td class="num" th:text="${p.inProgressCount}">0</td>
+            <td class="num" th:text="${p.completedCount}">0</td>
+            <td class="num" th:text="${p.totalStories}">0</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Sprints</div>
+    <table class="report">
+        <thead>
+        <tr>
+            <th class="num">Total</th>
+            <th class="num">Creados</th>
+            <th class="num">Iniciados</th>
+            <th class="num">Completados</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="num" th:text="${p.totalSprints}">0</td>
+            <td class="num" th:text="${p.createdSprints}">0</td>
+            <td class="num" th:text="${p.startedSprints}">0</td>
+            <td class="num" th:text="${p.completedSprints}">0</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Sprint(s) actual(es)</div>
+    <table class="report">
+        <thead>
+        <tr>
+            <th style="width: 18%;">Estado</th>
+            <th style="width: 22%;">Nombre</th>
+            <th style="width: 30%;">Objetivo</th>
+            <th style="width: 15%;">Inicio</th>
+            <th style="width: 15%;">Fin</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(p.currentSprints)}">
+            <td colspan="5" class="empty">No hay sprint actual para este proyecto.</td>
+        </tr>
+        <tr th:each="s : ${p.currentSprints}">
+            <td th:text="${s.status}">ACTIVE</td>
+            <td th:text="${s.name}">Sprint</td>
+            <td th:text="${s.goal}">Meta</td>
+            <td th:text="${s.startDate}">2024-01-01</td>
+            <td th:text="${s.endDate}">2024-01-15</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Miembros asignados</div>
+    <table class="report">
+        <thead>
+        <tr>
+            <th style="width: 10%;">Foto</th>
+            <th style="width: 35%;">Nombre</th>
+            <th style="width: 35%;">Email</th>
+            <th style="width: 20%;">Puesto</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(p.members)}">
+            <td colspan="4" class="empty">No hay miembros asignados.</td>
+        </tr>
+        <tr th:each="m : ${p.members}">
+            <td class="center">
+                <img th:if="${m.profileImage != null}"
+                     th:src="${m.profileImage}"
+                     class="avatar"
+                     alt="Foto"/>
+                <span th:if="${m.profileImage == null}" class="empty">—</span>
+            </td>
+            <td class="member-name" th:text="${m.fullName}">Nombre</td>
+            <td th:text="${m.email}">mail</td>
+            <td th:text="${m.position}">Position</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

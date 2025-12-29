@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Reporte general de roles</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 24mm 16mm 18mm 16mm;
+            @top-center {
+                content: element(pageHeader);
+            }
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 9px;
+            }
+        }
+
+        body {
+            font-family: sans-serif;
+            font-size: 10.5px;
+            color: #111;
+        }
+
+        .page-header {
+            position: running(pageHeader);
+            border-bottom: 1px solid #333;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header-left {
+            width: 30%;
+            vertical-align: middle;
+        }
+
+        .header-center {
+            width: 40%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .header-right {
+            width: 30%;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        .logo {
+            height: 42px;
+        }
+
+        .report-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .report-subtitle {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .summary-box {
+            border: 1px solid #444;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        table.report {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        table.report th, table.report td {
+            border: 1px solid #444;
+            padding: 5px;
+        }
+
+        table.report th {
+            font-weight: bold;
+            background: #f3f3f3;
+        }
+
+        .num {
+            text-align: right;
+        }
+
+        .empty {
+            font-style: italic;
+            color: #444;
+        }
+
+        .block {
+            border: 1px solid #444;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .block-title {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .pill {
+            display: inline-block;
+            border: 1px solid #444;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 9.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <table class="header-table">
+        <tr>
+            <td class="header-left">
+                <img class="logo" src="https://d25pia0bxxb59z.cloudfront.net/logo.png" alt="Logo"/>
+            </td>
+            <td class="header-center">
+                <div class="report-title">Reporte general de roles</div>
+                <div class="report-subtitle">Usuarios activos e inactivos por rol</div>
+            </td>
+            <td class="header-right">
+                <div class="report-subtitle">
+                    Generado:
+                    <span th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">2025-01-01</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="summary-box">
+    <table class="report">
+        <thead>
+        <tr>
+            <th>Total roles</th>
+            <th>Roles activos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="num" th:text="${result.totalRoles}">0</td>
+            <td class="num" th:text="${result.activeRoles}">0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${#lists.isEmpty(result.roles)}" class="empty" style="margin-top: 10px;">
+    No hay roles para mostrar.
+</div>
+
+<div th:each="r : ${result.roles}" class="block">
+    <div class="block-title">
+        <span th:text="${r.roleName}">Role</span>
+        <span style="float:right;">
+      Estado: <span class="pill" th:text="${r.roleActive ? 'Activo' : 'Inactivo'}">Activo</span>
+    </span>
+    </div>
+
+    <table class="report">
+        <thead>
+        <tr>
+            <th class="num">Usuarios activos</th>
+            <th class="num">Usuarios inactivos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="num" th:text="${r.activeUsersCount}">0</td>
+            <td class="num" th:text="${r.inactiveUsersCount}">0</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Usuarios activos</div>
+    <table class="report">
+        <thead>
+        <tr>
+            <th style="width:35%;">CUI</th>
+            <th style="width:65%;">Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(r.activeUsers)}">
+            <td colspan="2" class="empty">No hay usuarios activos en este rol.</td>
+        </tr>
+        <tr th:each="u : ${r.activeUsers}">
+            <td th:text="${u.cui}">0000</td>
+            <td th:text="${u.email}">mail</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Usuarios inactivos</div>
+    <table class="report">
+        <thead>
+        <tr>
+            <th style="width:35%;">CUI</th>
+            <th style="width:65%;">Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(r.inactiveUsers)}">
+            <td colspan="2" class="empty">No hay usuarios inactivos en este rol.</td>
+        </tr>
+        <tr th:each="u : ${r.inactiveUsers}">
+            <td th:text="${u.cui}">0000</td>
+            <td th:text="${u.email}">mail</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
