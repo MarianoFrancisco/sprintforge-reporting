@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Historial de contrataciones</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 24mm 16mm 18mm 16mm;
+            @top-center {
+                content: element(pageHeader);
+            }
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 9px;
+            }
+        }
+
+        body {
+            font-family: sans-serif;
+            font-size: 10.5px;
+            color: #111;
+        }
+
+        .page-header {
+            position: running(pageHeader);
+            border-bottom: 1px solid #333;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header-left {
+            width: 30%;
+            vertical-align: middle;
+        }
+
+        .header-center {
+            width: 40%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .header-right {
+            width: 30%;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        .logo {
+            height: 42px;
+        }
+
+        .report-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .report-subtitle {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .meta {
+            margin-top: 8px;
+            margin-bottom: 10px;
+        }
+
+        .meta table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .meta td {
+            padding: 3px 6px;
+            border: 1px solid #444;
+        }
+
+        .meta .label {
+            font-weight: bold;
+            width: 16%;
+        }
+
+        .meta .value {
+            width: 34%;
+        }
+
+        .summary-box {
+            border: 1px solid #444;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        table.report {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table.report th, table.report td {
+            border: 1px solid #444;
+            padding: 5px;
+        }
+
+        table.report th {
+            font-weight: bold;
+            background: #f3f3f3;
+        }
+
+        .num {
+            text-align: right;
+        }
+
+        .empty {
+            font-style: italic;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <table class="header-table">
+        <tr>
+            <td class="header-left">
+                <img class="logo" src="https://d25pia0bxxb59z.cloudfront.net/logo.png" alt="Logo"/>
+            </td>
+            <td class="header-center">
+                <div class="report-title">Historial de contrataciones</div>
+                <div class="report-subtitle">Empleados contratados en el periodo</div>
+            </td>
+            <td class="header-right">
+                <div class="report-subtitle">
+                    Generado:
+                    <span th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">2025-01-01</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="meta">
+    <table>
+        <tr>
+            <td class="label">Desde</td>
+            <td class="value" th:text="${from}">2024-01-01</td>
+            <td class="label">Hasta</td>
+            <td class="value" th:text="${to}">2024-12-31</td>
+        </tr>
+        <tr>
+            <td class="label">Sistema</td>
+            <td class="value">SprintForge</td>
+            <td class="label">Tipo</td>
+            <td class="value">Contrataciones</td>
+        </tr>
+    </table>
+</div>
+
+<div class="summary-box">
+    <b>Total de contrataciones:</b> <span th:text="${result.total}">0</span>
+</div>
+
+<table class="report">
+    <thead>
+    <tr>
+        <th style="width: 22%;">Fecha</th>
+        <th style="width: 18%;">CUI</th>
+        <th style="width: 60%;">Nombre</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(result.employees)}">
+        <td colspan="3" class="empty">No hay contrataciones en el rango seleccionado.</td>
+    </tr>
+    <tr th:each="e : ${result.employees}">
+        <td th:text="${e.eventDate}">2024-01-01</td>
+        <td th:text="${e.cui}">0000</td>
+        <td th:text="${e.fullName}">Empleado</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
