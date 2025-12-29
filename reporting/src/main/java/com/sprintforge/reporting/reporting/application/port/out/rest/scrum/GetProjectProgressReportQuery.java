@@ -1,4 +1,4 @@
-package com.sprintforge.reporting.reporting.application.port.out.rest.employee;
+package com.sprintforge.reporting.reporting.application.port.out.rest.scrum;
 
 import java.util.UUID;
 
