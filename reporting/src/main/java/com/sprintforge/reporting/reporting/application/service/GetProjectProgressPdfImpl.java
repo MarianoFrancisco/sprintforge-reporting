@@ -4,8 +4,8 @@ import com.sprintforge.common.application.port.result.ProjectProgressReportResul
 import com.sprintforge.reporting.reporting.application.port.in.query.GetProjectProgressPdf;
 import com.sprintforge.reporting.reporting.application.port.in.query.GetProjectProgressPdfQuery;
 import com.sprintforge.reporting.reporting.application.port.out.renderer.ReportRenderer;
-import com.sprintforge.reporting.reporting.application.port.out.rest.employee.GetProjectProgressReport;
-import com.sprintforge.reporting.reporting.application.port.out.rest.employee.GetProjectProgressReportQuery;
+import com.sprintforge.reporting.reporting.application.port.out.rest.scrum.GetProjectProgressReport;
+import com.sprintforge.reporting.reporting.application.port.out.rest.scrum.GetProjectProgressReportQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

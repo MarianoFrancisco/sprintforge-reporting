@@ -17,9 +17,53 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 @RequestMapping("/api/v1/reporting")
 public class ReportingController {
 
+    private final GetProjectProgressPdf getProjectProgressPdf;
+    private final GetHiringHistoryPdf getHiringHistoryPdf;
+    private final GetTerminationHistoryPdf getTerminationHistoryPdf;
+    private final GetRoleGeneralPdf getRoleGeneralPdf;
     private final GetIncomePdf getIncomePdf;
     private final GetExpensePdf getExpensePdf;
     private final GetProfitPdf getProfitPdf;
+
+    @GetMapping(value = "/project-progress.pdf", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte @NonNull []> projectProgressPdf(
+            @Valid @ModelAttribute ProjectProgressPdfRequestDTO dto
+    ) {
+        byte[] pdf = getProjectProgressPdf.handle(
+                ReportingRestMapper.toQuery(dto)
+        );
+        return PdfResponseMapper.projectProgress(pdf, dto.projectId());
+    }
+
+    @GetMapping(value = "/hiring-history.pdf", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte @NonNull []> hiringHistoryPdf(
+            @Valid @ModelAttribute HiringHistoryPdfRequestDTO dto
+    ) {
+        byte[] pdf = getHiringHistoryPdf.handle(
+                ReportingRestMapper.toQuery(dto)
+        );
+        return PdfResponseMapper.hiringHistory(pdf, dto.from(), dto.to());
+    }
+
+    @GetMapping(value = "/termination-history.pdf", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte @NonNull []> terminationHistoryPdf(
+            @Valid @ModelAttribute TerminationHistoryPdfRequestDTO dto
+    ) {
+        byte[] pdf = getTerminationHistoryPdf.handle(
+                ReportingRestMapper.toQuery(dto)
+        );
+        return PdfResponseMapper.terminationHistory(pdf, dto.from(), dto.to());
+    }
+
+    @GetMapping(value = "/role-general.pdf", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte @NonNull []> roleGeneralPdf(
+            @Valid @ModelAttribute RoleGeneralPdfRequestDTO dto
+    ) {
+        byte[] pdf = getRoleGeneralPdf.handle(
+                ReportingRestMapper.toQuery(dto)
+        );
+        return PdfResponseMapper.roleGeneral(pdf);
+    }
 
     @GetMapping(value = "/income.pdf", produces = APPLICATION_PDF_VALUE)
     public ResponseEntity<byte @NonNull []> incomePdf(
