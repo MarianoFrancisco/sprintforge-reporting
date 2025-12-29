@@ -72,6 +72,11 @@ logging:
     org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE_SQL:INFO}
     org.hibernate.orm.jdbc.bind: ${LOG_LEVEL_HIBERNATE_BIND:INFO}
 
+urls:
+  identity: ${IDENTITY_URL:http://localhost:8001}
+  employee: ${EMPLOYEE_URL:http://localhost:8002}
+  scrum: ${SCRUM_URL:http://localhost:8003}
+
 eureka:
   instance:
     prefer-ip-address: true
