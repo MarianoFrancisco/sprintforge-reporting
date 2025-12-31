@@ -1,6 +1,7 @@
 package com.sprintforge.reporting.reporting.infrastructure.adapter.out.renderer.pdf;
 
 import com.sprintforge.reporting.reporting.application.port.out.renderer.ReportRenderer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -10,13 +11,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class PdfRenderer implements ReportRenderer {
 
     private final TemplateEngine templateEngine;
-
-    public PdfRenderer(TemplateEngine templateEngine) {
-        this.templateEngine = templateEngine;
-    }
 
     @Override
     public byte[] render(String templateName, Map<String, Object> model) {
