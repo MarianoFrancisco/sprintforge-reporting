@@ -20,6 +20,14 @@ public final class PdfResponseMapper {
         return buildWithSuffix(pdf, "project-progress", suffix);
     }
 
+    public ResponseEntity<byte @NonNull []> employeeProductivity(
+            byte @NonNull [] pdf,
+            UUID employeeId
+    ) {
+        String suffix = (employeeId == null) ? "all" : employeeId.toString();
+        return buildWithSuffix(pdf, "employee-productivity", suffix);
+    }
+
     public ResponseEntity<byte @NonNull []> hiringHistory(
             byte @NonNull [] pdf,
             LocalDate from,

@@ -18,6 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 public class ReportingController {
 
     private final GetProjectProgressPdf getProjectProgressPdf;
+    private final GetEmployeeProductivityPdf getEmployeeProductivityPdf;
     private final GetHiringHistoryPdf getHiringHistoryPdf;
     private final GetTerminationHistoryPdf getTerminationHistoryPdf;
     private final GetRoleGeneralPdf getRoleGeneralPdf;
@@ -33,6 +34,16 @@ public class ReportingController {
                 ReportingRestMapper.toQuery(dto)
         );
         return PdfResponseMapper.projectProgress(pdf, dto.projectId());
+    }
+
+    @GetMapping(value = "/employee-productivity.pdf", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte @NonNull []> employeeProductivityPdf(
+            @Valid @ModelAttribute EmployeeProductivityPdfRequestDTO dto
+    ) {
+        byte[] pdf = getEmployeeProductivityPdf.handle(
+                ReportingRestMapper.toQuery(dto)
+        );
+        return PdfResponseMapper.employeeProductivity(pdf, dto.employeeId());
     }
 
     @GetMapping(value = "/hiring-history.pdf", produces = APPLICATION_PDF_VALUE)
