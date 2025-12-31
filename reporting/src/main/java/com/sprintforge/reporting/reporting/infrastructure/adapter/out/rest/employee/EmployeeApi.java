@@ -21,9 +21,11 @@ public class EmployeeApi implements
         GetHiringHistoryReport,
         GetTerminationHistoryReport {
 
-    private static final String INTERNAL_EMPLOYMENT_HISTORY_PATH =
-            "/internal-api/v1/employee/history";
+    private static final String INTERNAL_EMPLOYEE_PATH =
+            "/internal-api/v1/employee";
 
+    private static final String INTERNAL_EMPLOYMENT_HISTORY_PATH =
+            INTERNAL_EMPLOYEE_PATH + "/history";
     private static final String GET_HIRING_HISTORY_PATH =
             INTERNAL_EMPLOYMENT_HISTORY_PATH + "/hiring-report";
 

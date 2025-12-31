@@ -13,6 +13,14 @@ public class ReportingRestMapper {
         );
     }
 
+    public GetEmployeeProductivityPdfQuery toQuery(EmployeeProductivityPdfRequestDTO dto) {
+        return new GetEmployeeProductivityPdfQuery(
+                dto.from(),
+                dto.to(),
+                dto.employeeId()
+        );
+    }
+
     public GetHiringHistoryPdfQuery toQuery(HiringHistoryPdfRequestDTO dto) {
         return new GetHiringHistoryPdfQuery(
                 dto.from(),
