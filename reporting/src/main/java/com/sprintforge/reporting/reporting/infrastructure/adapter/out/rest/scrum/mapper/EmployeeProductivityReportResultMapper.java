@@ -40,7 +40,8 @@ public class EmployeeProductivityReportResultMapper {
                 e.workedStories(),
                 e.completedStories(),
                 e.pendingStories(),
-                e.deliveredStoryPoints()
+                e.deliveredStoryPoints(),
+                e.hoursWorked()
         );
     }
 
